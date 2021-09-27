@@ -8,27 +8,26 @@ namespace Trees
         static void Main(string[] args)
         {
             var initializer = new TreeInitializer();
-            var binaryTreeOperations = new BinaryTreeOperations();
             var basicTree = initializer.GetBasicTreePopulated();
             var binaryTree = initializer.GetBinaryTreePopulated();
             var traversedNodes = new List<BinaryTreeNode<int>>();
 
             System.Console.WriteLine("Traversal in pre-order.");
-            binaryTreeOperations.TraversalInPreOrder(binaryTree.Root, traversedNodes);
+            binaryTree.Traversal(traversedNodes, BinaryTreeOperations.TraversalTypeEnum.PRE_ORDER);
             traversedNodes.ForEach(node => System.Console.WriteLine(node.Data));
             traversedNodes.Clear();
 
             System.Console.WriteLine("Traversal in order.");
-            binaryTreeOperations.TraversalInOrder(binaryTree.Root, traversedNodes);
+            binaryTree.Traversal(traversedNodes, BinaryTreeOperations.TraversalTypeEnum.IN_ORDER);
             traversedNodes.ForEach(node => System.Console.WriteLine(node.Data));
             traversedNodes.Clear();
 
             System.Console.WriteLine("Traversal in post-order.");
-            binaryTreeOperations.TraversalInPostOrder(binaryTree.Root, traversedNodes);
+            binaryTree.Traversal(traversedNodes, BinaryTreeOperations.TraversalTypeEnum.POST_ORDER);
             traversedNodes.ForEach(node => System.Console.WriteLine(node.Data));
             traversedNodes.Clear();
 
-            int maxHeight = binaryTreeOperations.GetMaxHeight(binaryTree.Root);
+            int maxHeight = binaryTree.GetMaxHeight();
             System.Console.WriteLine($"Tree's max height is {maxHeight}");
         }
     }

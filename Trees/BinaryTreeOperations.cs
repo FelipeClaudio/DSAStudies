@@ -1,41 +1,67 @@
 using System.Collections.Generic;
+using System;
 
 namespace Trees
 {
-    public class BinaryTreeOperations
+    public static class BinaryTreeOperations
     {
-        public void TraversalInPreOrder<T>(BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
+        public enum TraversalTypeEnum
+        {
+            IN_ORDER,
+            PRE_ORDER,
+            POST_ORDER
+        }
+
+        public static void Traversal<T>(this Tree<BinaryTreeNode<T>> tree, List<BinaryTreeNode<T>> traversedNodes, TraversalTypeEnum traversalType)
+        {
+            switch (traversalType)
+            {
+                case TraversalTypeEnum.IN_ORDER:
+                    tree.Root.TraversalInOrder(traversedNodes);
+                    break;
+                case TraversalTypeEnum.PRE_ORDER:
+                    tree.Root.TraversalInPreOrder(traversedNodes);
+                    break;
+                case TraversalTypeEnum.POST_ORDER:  
+                    tree.Root.TraversalInPostOrder(traversedNodes);
+                    break;  
+                default:
+                    throw new ArgumentException($"Unsupported traversal order {traversalType}");
+            }
+        }
+
+        private static void TraversalInPreOrder<T>(this BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
         {
             traversedNodes.Add(node);
             if (node.LeftNode != null)
-                this.TraversalInPreOrder(node.LeftNode, traversedNodes);
+                BinaryTreeOperations.TraversalInPreOrder(node.LeftNode, traversedNodes);
             
             if (node.RightNode != null)
-                this.TraversalInPreOrder(node.RightNode, traversedNodes);
+                BinaryTreeOperations.TraversalInPreOrder(node.RightNode, traversedNodes);
         }
 
-        public void TraversalInOrder<T>(BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
+        private static void TraversalInOrder<T>(this BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
         {
             if (node.LeftNode != null)
-                this.TraversalInOrder(node.LeftNode, traversedNodes);
+                BinaryTreeOperations.TraversalInOrder(node.LeftNode, traversedNodes);
             
             traversedNodes.Add(node);
             if (node.RightNode != null)
-                this.TraversalInOrder(node.RightNode, traversedNodes);
+                BinaryTreeOperations.TraversalInOrder(node.RightNode, traversedNodes);
         }
 
-        public void TraversalInPostOrder<T>(BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
+        private static void TraversalInPostOrder<T>(this BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversedNodes)       
         {
             if (node.LeftNode != null)
-                this.TraversalInPostOrder(node.LeftNode, traversedNodes);
+                BinaryTreeOperations.TraversalInPostOrder(node.LeftNode, traversedNodes);
   
             if (node.RightNode != null)
-                this.TraversalInPostOrder(node.RightNode, traversedNodes);
+                BinaryTreeOperations.TraversalInPostOrder(node.RightNode, traversedNodes);
 
             traversedNodes.Add(node);
         }
 
-        public int GetHeight<T>(Node<T> node)
+        public static int GetHeight<T>(this Node<T> node)
         {
             int height = 1;
             var current = node;
@@ -48,14 +74,14 @@ namespace Trees
             return height;
         }
 
-        public int GetMaxHeight<T>(BinaryTreeNode<T> node)
+        public static int GetMaxHeight<T>(this Tree<BinaryTreeNode<T>> tree)
         {
-            int maxHeight = 0;
+            int maxHeight = 0; 
             var traversedNodes = new List<BinaryTreeNode<T>>();
-            this.TraversalInOrder(node, traversedNodes);
+            tree.Traversal(traversedNodes, BinaryTreeOperations.TraversalTypeEnum.IN_ORDER);
             foreach (var currentNode in traversedNodes)
             {
-                int currentNodeHeight = this.GetHeight(currentNode);
+                int currentNodeHeight = BinaryTreeOperations.GetHeight(currentNode);
 
                 if (currentNodeHeight > maxHeight)
                     maxHeight = currentNodeHeight;
