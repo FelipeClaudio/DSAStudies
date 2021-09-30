@@ -49,10 +49,10 @@ namespace Trees
             binarySearchTree.InsertValue(4);
             binarySearchTree.InsertValue(3);
             binarySearchTree.InsertValue(5);
-            binarySearchTree.InsertValue(1);
             binarySearchTree.InsertValue(10);
             binarySearchTree.InsertValue(8);
             binarySearchTree.InsertValue(9);
+            binarySearchTree.InsertValue(1);
         }
     }
 }
