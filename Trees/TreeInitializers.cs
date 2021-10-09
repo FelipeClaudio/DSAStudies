@@ -112,5 +112,32 @@ namespace Trees
 
             return tree;
         }
+
+        public void PopulateBinarySearchTree(BinarySearchTree<BinarySearchTreeNode<int>, int> binarySearchTree)
+        {
+            binarySearchTree.InsertValue(2);
+            binarySearchTree.InsertValue(4);
+            binarySearchTree.InsertValue(3);
+            binarySearchTree.InsertValue(5);
+            binarySearchTree.InsertValue(10);
+            binarySearchTree.InsertValue(8);
+            binarySearchTree.InsertValue(9);
+            binarySearchTree.InsertValue(1);
+            binarySearchTree.RemoveValue(1);
+            binarySearchTree.RemoveValue(4);
+            binarySearchTree.RemoveValue(5);
+            binarySearchTree.RemoveValue(3);
+            binarySearchTree.RemoveValue(8);
+            binarySearchTree.RemoveValue(10);
+            binarySearchTree.RemoveValue(9);
+            binarySearchTree.InsertValue(4);
+            binarySearchTree.InsertValue(3);
+            binarySearchTree.InsertValue(5);
+            binarySearchTree.InsertValue(10);
+            binarySearchTree.InsertValue(8);
+            binarySearchTree.InsertValue(9);
+            binarySearchTree.InsertValue(1);
+            binarySearchTree.RemoveValue(2);
+        }
     }
 }

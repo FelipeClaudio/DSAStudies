@@ -13,10 +13,10 @@ namespace Trees
 
             while (currentNode != null)
             {
-                int comparisionResult = currentNode.Data.CompareTo(value);
+                int comparisionResult = value.CompareTo(currentNode.Data);
                 if (comparisionResult == 0)
                     return currentNode;
-                else if (comparisionResult > 0)
+                else if (comparisionResult < 0)
                     currentNode = (T)currentNode.LeftNode;
                 else 
                     currentNode = (T)currentNode.RightNode;
@@ -25,14 +25,14 @@ namespace Trees
             return currentNode;
         }
 
-        public void InsertValue(V elementValue)
+        public virtual void InsertValue(V value)
         {
-            if (this.GetElementNodeByValue(elementValue) != null)
-                throw new ArgumentException($"Node with value: {elementValue} already exists!");
+            if (this.GetElementNodeByValue(value) != null)
+                throw new ArgumentException($"Node with value: {value} already exists!");
             
             var newNode = new BinarySearchTreeNode<V>
             {
-                Data = elementValue
+                Data = value
             };
             if (this.Root == null)
                 this.Root = (T) newNode;
@@ -44,14 +44,14 @@ namespace Trees
                 while(currentNode != null)
                 {
                     previousNode = currentNode;
-                    comparisionResult = currentNode.Data.CompareTo(elementValue);
-                    if (comparisionResult > 0)
+                    comparisionResult = value.CompareTo(currentNode.Data);
+                    if (comparisionResult < 0)
                         currentNode = (T)currentNode.LeftNode;
                     else 
                         currentNode = (T)currentNode.RightNode; 
                 }
 
-                if (comparisionResult > 0)
+                if (comparisionResult < 0)
                     previousNode.LeftNode = newNode;          
                 else
                     previousNode.RightNode = newNode;
@@ -60,8 +60,7 @@ namespace Trees
             }
         }
 
-        // TODO: Refazer
-        public void RemoveValue(V value)
+        public virtual void RemoveValue(V value)
         {
             if (this.Root == null)
                 throw new ArgumentException($"Tree is already empty!");
@@ -71,7 +70,27 @@ namespace Trees
                 throw new ArgumentException($"Node with value {value} doesn't exist.");
 
             if (existingNode.Parent == null)
-                throw new ArgumentException($"Can't remove root node.");
+            {
+                BinaryTreeNode<V> node = null; 
+                if (existingNode.LeftNode != null)
+                {
+                    node = existingNode.LeftNode; 
+                    while(node.RightNode != null)
+                        node = node.RightNode;
+                }
+                else if (existingNode.RightNode != null)
+                {
+                    node = existingNode.RightNode;
+                    while(node.LeftNode != null)
+                        node = node.LeftNode;
+                }
+                else
+                    this.Root = null;
+                
+                this.Root = (T) node;
+                this.ReplaceNode(this.Root, (T)node);
+                return;
+            }
 
             T parentNode = (T)existingNode.Parent;
             T currentNode = existingNode;
@@ -84,16 +103,19 @@ namespace Trees
                     parentNode.RightNode = null;
                 return;
             }
+            // Right branch doesn't exist
             else if (currentNode.RightNode == null)
             {
                 currentNode = (T)existingNode.LeftNode;
                 currentNode.Parent = existingNode.Parent;
             }
+            // Left branch doesn't exist
             else if (currentNode.LeftNode == null)
             {
                 currentNode = (T)existingNode.RightNode;
                 currentNode.Parent = existingNode.Parent;
             }
+            // Both branches exist
             else
             {
                 currentNode = (T)existingNode.LeftNode;
@@ -112,17 +134,17 @@ namespace Trees
             this.ReplaceNode(existingNode, currentNode);
         }
 
-        public void ReplaceNode(T existingNode, T currentNode)
+        private void ReplaceNode(T existingNode, T currentNode)
         {
-            T parent = (T)existingNode.Parent;
-            if (parent == null)
-                return;
-
             if (existingNode.RightNode != null && existingNode.RightNode?.Data.CompareTo(currentNode.Data) != 0)
                 existingNode.RightNode.Parent = currentNode;
 
             if (existingNode.LeftNode != null && existingNode.LeftNode?.Data.CompareTo(currentNode.Data) != 0)
                 existingNode.LeftNode.Parent = currentNode;
+
+            T parent = (T)existingNode.Parent;
+            if (parent == null)
+                return;
 
             if (parent.LeftNode?.Data.CompareTo(existingNode.Data) == 0)
                 parent.LeftNode = currentNode;
