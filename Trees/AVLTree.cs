@@ -24,22 +24,16 @@ namespace Trees
 
             var traversedNodes = new List<BinarySearchTreeNode<V>>();
             this.TraversalInOrder((T)this.Root, traversedNodes);
-            var nodeBalancing = new Dictionary<BinarySearchTreeNode<V>, int>();
+            var nodeBalancing = new Dictionary<V, int>();
 
             foreach(var node in traversedNodes)
             {
-                
-                if (nodeBalancing.TryGetValue((T)node, out int currentNodeBalancing) == false)
-                    currentNodeBalancing = this.GetBalancingForNode((T)node);
+                if (nodeBalancing.TryGetValue(node.Data, out int currentNodeBalancing) == false)
+                    currentNodeBalancing = this.GetBalancingForNode((T)node, nodeBalancing);
 
-                int leftNodeBalance = 0;
-                if (node.LeftNode != null && nodeBalancing.TryGetValue((T)node.LeftNode, out int leftNodeBalanceTemp) == false)
-                    leftNodeBalance = leftNodeBalanceTemp != 0? leftNodeBalanceTemp : this.GetBalancingForNode((T)node.LeftNode);
+                int leftNodeBalance = node.LeftNode != null? nodeBalancing[node.LeftNode.Data] : 0;
+                int rightNodeBalance = node.RightNode != null? nodeBalancing[node.RightNode.Data] : 0;
 
-                int rightNodeBalance = 0;
-                if (node.RightNode != null && nodeBalancing.TryGetValue((T)node.RightNode, out int rightNodeBalanceTemp) == false)
-                    rightNodeBalance = rightNodeBalanceTemp != 0? rightNodeBalanceTemp : this.GetBalancingForNode((T)node.RightNode);
-                
                 if (Math.Abs(currentNodeBalancing) <= 1)
                     continue;
 
@@ -57,25 +51,57 @@ namespace Trees
                     else
                         this.RotateRight((T)node);
                 }
+                nodeBalancing.Clear();
             }  
         }
 
-        private int GetBalancingForNode(T node)
+        private int GetBalancingForNode(T node, Dictionary<V, int> balancedNodes)
         {
             if ((node.LeftNode == null) && (node.RightNode == null))
-                return 1;
+            {
+                balancedNodes.Add(node.Data, 0);
+                return 0;
+            }
             
-            int leftNodeBalance = node.LeftNode != null? this.GetBalancingForNode((T)node.LeftNode) : 0;
-            int rightNodeBalance = node.RightNode != null? this.GetBalancingForNode((T)node.RightNode) : 0;
+            int leftNodeBalance = 0, rightNodeBalance = 0;
+            if (node.LeftNode != null)
+            {
+                if (balancedNodes.TryGetValue(node.LeftNode.Data, out int nodeBalancing))
+                    leftNodeBalance = nodeBalancing + 1;
+                else
+                {
+                    leftNodeBalance = this.GetBalancingForNode((T)node.LeftNode, balancedNodes);
+                    leftNodeBalance++;
+                    balancedNodes.TryAdd(node.Data, leftNodeBalance);
+                }
+            }
+            if (node.RightNode != null)
+            {
+                if (balancedNodes.TryGetValue(node.RightNode.Data, out int nodeBalancing))
+                    rightNodeBalance = nodeBalancing + 1;
+                else
+                {
+                    rightNodeBalance = this.GetBalancingForNode((T)node.RightNode, balancedNodes);
+                    rightNodeBalance++;
+                    balancedNodes.TryAdd(node.Data, rightNodeBalance);
+                }
+            }
 
             return rightNodeBalance - leftNodeBalance;
         }
 
         private void RotateLeft(T node)
         {
-            T newRootNode = (T)node.RightNode.Parent;
-            newRootNode.Parent = node.Parent;
-            newRootNode.LeftNode = node;
+            T newRootNode = (T)node.RightNode;
+            if (node == this.Root)
+                this.Root = newRootNode;
+                
+            if (newRootNode.LeftNode != null)
+                newRootNode.LeftNode.RightNode = node;
+            else
+                newRootNode.LeftNode = node;
+            node.LeftNode = null;
+            node.RightNode = null;
         }
 
         private void RotateRight(T node){}
