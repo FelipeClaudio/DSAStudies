@@ -31,8 +31,19 @@ namespace Trees
                 if (nodeBalancing.TryGetValue(node.Data, out int currentNodeBalancing) == false)
                     currentNodeBalancing = this.GetBalancingForNode((T)node, nodeBalancing);
 
-                int leftNodeBalance = node.LeftNode != null? nodeBalancing[node.LeftNode.Data] : 0;
-                int rightNodeBalance = node.RightNode != null? nodeBalancing[node.RightNode.Data] : 0;
+                int leftNodeBalance = 0;
+                if (node.LeftNode != null)
+                {
+                    bool isBalancingAlreadyCalculated = nodeBalancing.TryGetValue(node.LeftNode.Data, out int balancing);
+                    leftNodeBalance = isBalancingAlreadyCalculated? balancing : this.GetBalancingForNode((T)node.LeftNode, nodeBalancing);
+                }
+
+                int rightNodeBalance = 0;
+                if (node.RightNode != null)
+                {
+                    bool isBalancingAlreadyCalculated = nodeBalancing.TryGetValue(node.RightNode.Data, out int balancing);
+                    rightNodeBalance = isBalancingAlreadyCalculated? balancing : this.GetBalancingForNode((T)node.RightNode, nodeBalancing);
+                }
 
                 if (Math.Abs(currentNodeBalancing) <= 1)
                     continue;
@@ -67,11 +78,11 @@ namespace Trees
             if (node.LeftNode != null)
             {
                 if (balancedNodes.TryGetValue(node.LeftNode.Data, out int nodeBalancing))
-                    leftNodeBalance = nodeBalancing + 1;
+                    leftNodeBalance = nodeBalancing - 1;
                 else
                 {
                     leftNodeBalance = this.GetBalancingForNode((T)node.LeftNode, balancedNodes);
-                    leftNodeBalance++;
+                    leftNodeBalance--;
                     balancedNodes.TryAdd(node.Data, leftNodeBalance);
                 }
             }
@@ -87,7 +98,7 @@ namespace Trees
                 }
             }
 
-            return rightNodeBalance - leftNodeBalance;
+            return rightNodeBalance + leftNodeBalance;
         }
 
         private void RotateLeft(T node)
@@ -95,16 +106,31 @@ namespace Trees
             T newRootNode = (T)node.RightNode;
             if (node == this.Root)
                 this.Root = newRootNode;
-                
+
             if (newRootNode.LeftNode != null)
                 newRootNode.LeftNode.RightNode = node;
             else
                 newRootNode.LeftNode = node;
+
             node.LeftNode = null;
             node.RightNode = null;
         }
 
-        private void RotateRight(T node){}
+        private void RotateRight(T node)
+        {
+            T newRootNode = (T)node.LeftNode;
+            if (node == this.Root)
+                this.Root = newRootNode;
+
+            if (newRootNode.RightNode != null)
+                newRootNode.RightNode.RightNode = node;
+            else
+                newRootNode.RightNode = node;
+
+            node.LeftNode = null;
+            node.RightNode = null;
+        }
+
         private void RotateRightLeft(T node){}
         private void RotateLeftRight(T node){}
 

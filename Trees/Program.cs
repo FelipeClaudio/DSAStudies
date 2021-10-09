@@ -37,6 +37,9 @@ namespace Trees
             avlTree.InsertValue(1);
             avlTree.InsertValue(2);
             avlTree.InsertValue(3);
+            // avlTree.InsertValue(3);
+            // avlTree.InsertValue(2);
+            // avlTree.InsertValue(1);
         }
     }
 }
