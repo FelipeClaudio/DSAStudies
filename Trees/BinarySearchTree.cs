@@ -85,10 +85,21 @@ namespace Trees
                         node = node.LeftNode;
                 }
                 else
+                {
                     this.Root = null;
-                
-                this.Root = (T) node;
-                this.ReplaceNode(this.Root, (T)node);
+                    return;
+                }
+
+                if (((T)node.Parent).RightNode?.Data.CompareTo(node.Data) == 0)
+                    ((T)node.Parent).RightNode = null;
+                else
+                    ((T)node.Parent).LeftNode = null;
+
+                this.ReplaceNode(existingNode, (T)node);
+                node.LeftNode = this.Root.LeftNode;
+                node.RightNode = this.Root.RightNode;
+                node.Parent = null;
+                this.Root = (T)node;
                 return;
             }
 

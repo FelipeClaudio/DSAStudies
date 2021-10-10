@@ -19,6 +19,12 @@ namespace Trees
             this.BalanceTree();
         }
 
+        public void Clear()
+        {
+            while(this.Root != null)
+                this.RemoveValue(this.Root.Data);
+        }
+
         private void BalanceTree()
         {
             if (this.Root == null)
@@ -107,7 +113,7 @@ namespace Trees
                 node.RightNode = newRootNode.LeftNode;
                 node.RightNode.Parent = node;
             }
-
+            newRootNode.Parent = node.Parent;
             this.SetParentReferenceAfterRotating(node, newRootNode);
             this.RemoveCircularReference(node, newRootNode);
             node.Parent = newRootNode;
@@ -128,12 +134,12 @@ namespace Trees
             if (node == this.Root)
                 this.Root = newRootNode;
 
-            if (newRootNode.LeftNode != null)
+            if (newRootNode.RightNode != null)
             {
                 node.LeftNode = newRootNode.RightNode;
                 node.LeftNode.Parent = node;
             }
-
+            newRootNode.Parent = node.Parent;
             this.SetParentReferenceAfterRotating(node, newRootNode);
             this.RemoveCircularReference(node, newRootNode);
             node.Parent = newRootNode;

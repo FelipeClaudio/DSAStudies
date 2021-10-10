@@ -38,6 +38,13 @@ namespace Trees
             {
                 avlTree.InsertValue(i);
             }
+
+            avlTree.Clear();
+
+            for (int i = 10; i > 0; i--)
+            {
+                avlTree.InsertValue(i);
+            }
         }
     }
 }
