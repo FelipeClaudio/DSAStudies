@@ -97,16 +97,29 @@ namespace Trees
         {
             T newRootNode = (T)node.RightNode;
             if (node == this.Root)
+            {
+                newRootNode.Parent = null;
                 this.Root = newRootNode;
+            }
 
             if (newRootNode.LeftNode != null)
-                newRootNode.LeftNode.RightNode = node;
-            else
-                newRootNode.LeftNode = node;
+            {
+                node.RightNode = newRootNode.LeftNode;
+                node.RightNode.Parent = node;
+            }
 
             this.SetParentReferenceAfterRotating(node, newRootNode);
-            node.LeftNode = null;
-            node.RightNode = null;
+            this.RemoveCircularReference(node, newRootNode);
+            node.Parent = newRootNode;
+            newRootNode.LeftNode = node;
+        }
+
+        private void RemoveCircularReference(T node, T newRootNode)
+        {
+            if (node.LeftNode?.Data.CompareTo(newRootNode.Data) == 0)
+                node.LeftNode = null;
+            if (node.RightNode?.Data.CompareTo(newRootNode.Data) == 0)
+                node.RightNode = null;
         }
 
         private void RotateRight(T node)
@@ -115,14 +128,16 @@ namespace Trees
             if (node == this.Root)
                 this.Root = newRootNode;
 
-            if (newRootNode.RightNode != null)
-                newRootNode.RightNode.RightNode = node;
-            else
-                newRootNode.RightNode = node;
+            if (newRootNode.LeftNode != null)
+            {
+                node.LeftNode = newRootNode.RightNode;
+                node.LeftNode.Parent = node;
+            }
 
             this.SetParentReferenceAfterRotating(node, newRootNode);
-            node.LeftNode = null;
-            node.RightNode = null;
+            this.RemoveCircularReference(node, newRootNode);
+            node.Parent = newRootNode;
+            newRootNode.RightNode = node;
         }
 
         private void SetParentReferenceAfterRotating(T node, T newRootNode)
