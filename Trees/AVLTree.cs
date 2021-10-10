@@ -15,6 +15,8 @@ namespace Trees
 
         public override void RemoveValue(V value)
         {
+            base.RemoveValue(value);
+            this.BalanceTree();
         }
 
         private void BalanceTree()
@@ -51,14 +53,14 @@ namespace Trees
                 if (currentNodeBalancing > 1)
                 {
                     if (rightNodeBalance < 0)
-                        this.RotateLeftRight((T)node);
+                        this.RotateRightLeft((T)node);
                     else
                         this.RotateLeft((T)node);
                 }
                 else
                 {
                     if (leftNodeBalance > 0)
-                        this.RotateRightLeft((T)node);
+                        this.RotateLeftRight((T)node);
                     else
                         this.RotateRight((T)node);
                 }
@@ -67,38 +69,28 @@ namespace Trees
         }
 
         private int GetBalancingForNode(T node, Dictionary<V, int> balancedNodes)
-        {
-            if ((node.LeftNode == null) && (node.RightNode == null))
-            {
-                balancedNodes.Add(node.Data, 0);
-                return 0;
-            }
-            
-            int leftNodeBalance = 0, rightNodeBalance = 0;
-            if (node.LeftNode != null)
-            {
-                if (balancedNodes.TryGetValue(node.LeftNode.Data, out int nodeBalancing))
-                    leftNodeBalance = nodeBalancing - 1;
-                else
-                {
-                    leftNodeBalance = this.GetBalancingForNode((T)node.LeftNode, balancedNodes);
-                    leftNodeBalance--;
-                    balancedNodes.TryAdd(node.Data, leftNodeBalance);
-                }
-            }
-            if (node.RightNode != null)
-            {
-                if (balancedNodes.TryGetValue(node.RightNode.Data, out int nodeBalancing))
-                    rightNodeBalance = nodeBalancing + 1;
-                else
-                {
-                    rightNodeBalance = this.GetBalancingForNode((T)node.RightNode, balancedNodes);
-                    rightNodeBalance++;
-                    balancedNodes.TryAdd(node.Data, rightNodeBalance);
-                }
-            }
+        {         
+            int leftNodeLevel = node.LeftNode != null? 
+                this.GetMaxNodeLevelFromLeafToRoot((T)node.LeftNode) : 0;         
+            int rightNodeLevel = node.RightNode != null? 
+                this.GetMaxNodeLevelFromLeafToRoot((T)node.RightNode) : 0;
 
-            return rightNodeBalance + leftNodeBalance;
+            int nodeBalancing = rightNodeLevel - leftNodeLevel;
+            balancedNodes.TryAdd(node.Data, nodeBalancing);
+            return nodeBalancing;
+        }
+
+        private int GetMaxNodeLevelFromLeafToRoot(T node)
+        {
+            if (node == null)
+                return 0;
+
+            if (node.LeftNode == null && node.RightNode == null)
+                return 1;
+            
+            return 1 + Math.Max(
+                this.GetMaxNodeLevelFromLeafToRoot((T)node.LeftNode),
+                this.GetMaxNodeLevelFromLeafToRoot((T)node.RightNode));
         }
 
         private void RotateLeft(T node)
@@ -112,6 +104,7 @@ namespace Trees
             else
                 newRootNode.LeftNode = node;
 
+            this.SetParentReferenceAfterRotating(node, newRootNode);
             node.LeftNode = null;
             node.RightNode = null;
         }
@@ -127,12 +120,34 @@ namespace Trees
             else
                 newRootNode.RightNode = node;
 
+            this.SetParentReferenceAfterRotating(node, newRootNode);
             node.LeftNode = null;
             node.RightNode = null;
         }
 
-        private void RotateRightLeft(T node){}
-        private void RotateLeftRight(T node){}
+        private void SetParentReferenceAfterRotating(T node, T newRootNode)
+        {
+            if (node.Parent != null)
+            {
+                T parentNode = (T)node.Parent;
+                newRootNode.Parent = parentNode;  
+                if (node == parentNode.RightNode)
+                    parentNode.RightNode = newRootNode;
+                else
+                    parentNode.LeftNode = newRootNode;
+            }
+        }
+
+        private void RotateRightLeft(T node)
+        {
+            this.RotateRight((T)node.RightNode);
+            this.RotateLeft(node);
+        }
+        private void RotateLeftRight(T node)
+        {
+            this.RotateLeft((T)node.LeftNode);
+            this.RotateRight(node);
+        }
 
         private void TraversalInOrder(BinarySearchTreeNode<V> node, List<BinarySearchTreeNode<V>> traversedNodes)
         {   

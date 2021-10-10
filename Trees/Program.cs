@@ -34,12 +34,18 @@ namespace Trees
             initializer.PopulateBinarySearchTree(binarySearchTree);
 
             var avlTree = new AVLTree<BinarySearchTreeNode<int>, int>();
-            avlTree.InsertValue(1);
-            avlTree.InsertValue(2);
-            avlTree.InsertValue(3);
+            // avlTree.InsertValue(1);
+            // avlTree.InsertValue(2);
+            // avlTree.InsertValue(3);
             // avlTree.InsertValue(3);
             // avlTree.InsertValue(2);
             // avlTree.InsertValue(1);
+            // avlTree.InsertValue(1);
+            // avlTree.InsertValue(3);
+            // avlTree.InsertValue(2);
+            avlTree.InsertValue(3);
+            avlTree.InsertValue(1);
+            avlTree.InsertValue(2);
         }
     }
 }
