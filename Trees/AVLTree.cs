@@ -113,10 +113,9 @@ namespace Trees
                 node.RightNode = newRootNode.LeftNode;
                 node.RightNode.Parent = node;
             }
-            newRootNode.Parent = node.Parent;
+            
             this.SetParentReferenceAfterRotating(node, newRootNode);
-            this.RemoveCircularReference(node, newRootNode);
-            node.Parent = newRootNode;
+            this.RemoveCircularReference(node, newRootNode);     
             newRootNode.LeftNode = node;
         }
 
@@ -131,10 +130,9 @@ namespace Trees
                 node.LeftNode = newRootNode.RightNode;
                 node.LeftNode.Parent = node;
             }
-            newRootNode.Parent = node.Parent;
+
             this.SetParentReferenceAfterRotating(node, newRootNode);
             this.RemoveCircularReference(node, newRootNode);
-            node.Parent = newRootNode;
             newRootNode.RightNode = node;
         }
 
@@ -152,15 +150,16 @@ namespace Trees
 
         private void SetParentReferenceAfterRotating(T node, T newRootNode)
         {
+            T parentNode = (T)node.Parent;
+            newRootNode.Parent = parentNode;  
             if (node.Parent != null)
             {
-                T parentNode = (T)node.Parent;
-                newRootNode.Parent = parentNode;  
                 if (node == parentNode.RightNode)
                     parentNode.RightNode = newRootNode;
                 else
                     parentNode.LeftNode = newRootNode;
             }
+            node.Parent = newRootNode;
         }
 
         private void RemoveCircularReference(T node, T newRootNode)
