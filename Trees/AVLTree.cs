@@ -120,14 +120,6 @@ namespace Trees
             newRootNode.LeftNode = node;
         }
 
-        private void RemoveCircularReference(T node, T newRootNode)
-        {
-            if (node.LeftNode?.Data.CompareTo(newRootNode.Data) == 0)
-                node.LeftNode = null;
-            if (node.RightNode?.Data.CompareTo(newRootNode.Data) == 0)
-                node.RightNode = null;
-        }
-
         private void RotateRight(T node)
         {
             T newRootNode = (T)node.LeftNode;
@@ -146,6 +138,18 @@ namespace Trees
             newRootNode.RightNode = node;
         }
 
+        private void RotateRightLeft(T node)
+        {
+            this.RotateRight((T)node.RightNode);
+            this.RotateLeft(node);
+        }
+        
+        private void RotateLeftRight(T node)
+        {
+            this.RotateLeft((T)node.LeftNode);
+            this.RotateRight(node);
+        }
+
         private void SetParentReferenceAfterRotating(T node, T newRootNode)
         {
             if (node.Parent != null)
@@ -159,15 +163,12 @@ namespace Trees
             }
         }
 
-        private void RotateRightLeft(T node)
+        private void RemoveCircularReference(T node, T newRootNode)
         {
-            this.RotateRight((T)node.RightNode);
-            this.RotateLeft(node);
-        }
-        private void RotateLeftRight(T node)
-        {
-            this.RotateLeft((T)node.LeftNode);
-            this.RotateRight(node);
+            if (node.LeftNode?.Data.CompareTo(newRootNode.Data) == 0)
+                node.LeftNode = null;
+            if (node.RightNode?.Data.CompareTo(newRootNode.Data) == 0)
+                node.RightNode = null;
         }
 
         private void TraversalInOrder(BinarySearchTreeNode<V> node, List<BinarySearchTreeNode<V>> traversedNodes)
