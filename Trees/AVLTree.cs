@@ -32,6 +32,7 @@ namespace Trees
 
             var traversedNodes = new List<BinarySearchTreeNode<V>>();
             this.TraversalInOrder((T)this.Root, traversedNodes);
+            // Structure used to avoid recalculating balancing everytime. It could be a node property as well.
             var nodeBalancing = new Dictionary<V, int>();
 
             foreach(var node in traversedNodes)
@@ -70,6 +71,9 @@ namespace Trees
                     else
                         this.RotateRight((T)node);
                 }
+
+                // If a balancing is done, it's necessary to recalculate all node balancing.
+                // Performance may be improved by not recalculating balancing for all node, but only for affected branches.
                 nodeBalancing.Clear();
             }  
         }
