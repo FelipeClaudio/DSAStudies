@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Trees
 {
@@ -46,16 +47,28 @@ namespace Trees
                 avlTree.InsertValue(i);
             }
 
-            var heapTree = new HeapTree<int>(HeapTree<int>.HeapTypeEnum.MAX);
-            heapTree.InsertValue(5);
-            heapTree.InsertValue(2);
-            heapTree.InsertValue(3);
+            var heapTree = new HeapTree<int>(HeapTree<int>.HeapTypeEnum.MIN);
+            
+            heapTree.InsertValue(15);
+            heapTree.InsertValue(7);
             heapTree.InsertValue(1);
+            heapTree.InsertValue(9);
+            heapTree.InsertValue(20);
+            heapTree.InsertValue(3);
+            heapTree.InsertValue(2);
+            heapTree.InsertValue(14);
+            heapTree.InsertValue(5);
+            heapTree.InsertValue(12);
 
-            System.Console.WriteLine(heapTree.GetRootNode());
-            System.Console.WriteLine(heapTree.GetRootNode());
-            System.Console.WriteLine(heapTree.GetRootNode());
-            System.Console.WriteLine(heapTree.GetRootNode());
+            for (int i = 0; i < 10; i++)
+            {
+                System.Console.WriteLine(heapTree.GetRootNode());
+            }
+
+            var random = new Random();
+            List<int> randomList = Enumerable.Range(0, 10).Select(x => random.Next(1, 200)).ToList();
+            var sortedList = HeapTree<int>.Sort(randomList, HeapTree<int>.HeapTypeEnum.MIN);
+            sortedList.ForEach(elem => System.Console.WriteLine(elem));
         }
     }
 }
