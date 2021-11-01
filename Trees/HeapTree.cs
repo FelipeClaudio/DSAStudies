@@ -26,6 +26,9 @@ public class HeapTree<T>
         int pivotIndex = 0;
         int childIndex = 1;
         bool continueToLeaf = true;
+
+        // On removing an element, the rightmost leaf should be placed at root position.
+        // After that, it must be moved to the correct position to keep tree properties.
         while ((childIndex <= lastInsertionIndex) && (continueToLeaf == true))
         {
             int newParentIndex = childIndex;
@@ -54,6 +57,9 @@ public class HeapTree<T>
 
         int pivotIndex = lastInsertionIndex/2;
         int newElementIndex = lastInsertionIndex;
+        
+        // On insertion, it is necessary to insert the new value at the first empty space in array. 
+        // The node is then moved upwards according to heap's specific rules (min or max heap).
         while (pivotIndex >= 0 && this.LeftElementComesFirstInOrder(newElementIndex, pivotIndex))
         {
             this.Swap(newElementIndex, pivotIndex);
