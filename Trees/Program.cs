@@ -45,6 +45,17 @@ namespace Trees
             {
                 avlTree.InsertValue(i);
             }
+
+            var heapTree = new HeapTree<int>(HeapTree<int>.HeapTypeEnum.MAX);
+            heapTree.InsertValue(5);
+            heapTree.InsertValue(2);
+            heapTree.InsertValue(3);
+            heapTree.InsertValue(1);
+
+            System.Console.WriteLine(heapTree.GetRootNode());
+            System.Console.WriteLine(heapTree.GetRootNode());
+            System.Console.WriteLine(heapTree.GetRootNode());
+            System.Console.WriteLine(heapTree.GetRootNode());
         }
     }
 }
