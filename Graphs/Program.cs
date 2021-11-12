@@ -1,7 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-
-var graph = new Graph<string>(true, true);
+﻿var graph = new Graph<string>(true, true);
 Node<string> n1 = graph.AddNode("first");
 Node<string> n2 = graph.AddNode("second");
 Node<string> n3 = graph.AddNode("third");
