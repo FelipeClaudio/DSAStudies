@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TreinoAlgoritmos
+namespace FloodFill
 {
     class Program
     {

@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Trees/bin/Debug/net5.0/Trees.dll",
+      "program": "${workspaceFolder}/Graphs/bin/Debug/net6.0/Graphs.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
