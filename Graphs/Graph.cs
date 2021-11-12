@@ -29,13 +29,38 @@ public class Graph<T>
         return node;
     }
 
-    public void AddEdge(Node<T> from, Node<T> to, int weight = 1)
+    public void AddEdge(Node<T> from, Node<T> to, int? weight = null)
     {
-        if (this._isDirected == false && this._isWeighted == false)
-            this._edges.Add(new Edge<T>(to, from, weight));
+        if (this[from, to] == null)
+        {
+            if (this._isWeighted == true && weight.HasValue)
+                this._edges.Add(new Edge<T>(from, to, weight.Value));
+            else
+                this._edges.Add(new Edge<T>(from, to, 1));
 
-        this._edges.Add(new Edge<T>(from, to, weight));
+            // The path starting at "to" and finish at "from" is also added
+            // if it doesn't already exist in an undirected and unweighted
+            if (this._isDirected == false && this._isWeighted == false && this[to, from] == null)
+                this._edges.Add(new Edge<T>(to, from, 1));
+
+            this.UpdateIds();
+        }
+    }
+
+    public void RemoveEdge(Node<T> from, Node<T> to)
+    {
+        Edge<T> edge = this[from, to];
+        if (edge != null)
+            this._edges.Remove(edge);
+
         this.UpdateIds();
+    }
+
+    public void RemoveNode(Node<T> node)
+    {
+        this._nodes.Remove(node);
+        IEnumerable<Edge<T>> edgesContainingNode = this._edges.Where(edge => edge.From == node || edge.To == node);
+        this._edges.RemoveAll(edge => edgesContainingNode.Contains(edge));
     }
 
     private void UpdateIds()
