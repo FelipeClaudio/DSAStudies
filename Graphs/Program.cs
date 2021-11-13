@@ -24,8 +24,13 @@ graph.AddEdge(n7, n5, 4);
 graph.AddEdge(n7, n8, 6);
 graph.AddEdge(n6, n7, 1);
 
-List<Node<string>> traversalResult = graph.Traverse(GraphOperations.TraversalTypeEnum.DFS);
-traversalResult.ForEach(t => System.Console.WriteLine(t.Data));
+System.Console.WriteLine("DFS:");
+List<Node<string>> dfsTraversalResult = graph.Traverse(GraphOperations.TraversalTypeEnum.DFS);
+dfsTraversalResult.ForEach(t => System.Console.WriteLine(t.Data));
+
+System.Console.WriteLine("BFS:");
+List<Node<string>> bfsTraversalResult = graph.Traverse(GraphOperations.TraversalTypeEnum.BFS);
+bfsTraversalResult.ForEach(t => System.Console.WriteLine(t.Data));
 
 var edge = graph[n4, n1];
 
