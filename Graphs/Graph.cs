@@ -37,11 +37,13 @@ public class Graph<T>
                 this._edges.Add(new Edge<T>(from, to, weight.Value));
             else
                 this._edges.Add(new Edge<T>(from, to, 1));
+            
+            from.Neighboors.Add(to);
 
             // The path starting at "to" and finish at "from" is also added
             // if it doesn't already exist in an undirected and unweighted
             if (this._isDirected == false && this._isWeighted == false && this[to, from] == null)
-                this._edges.Add(new Edge<T>(to, from, 1));
+                this._edges.Add(new Edge<T>(to, from, 1));            
 
             this.UpdateIds();
         }
@@ -68,4 +70,6 @@ public class Graph<T>
         int i = 1;
         this._nodes.ForEach(node => node.Id = i++);
     }
+
+    public List<Node<T>> GetNodes() => this._nodes;
 }

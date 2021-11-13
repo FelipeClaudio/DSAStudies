@@ -1,16 +1,31 @@
-﻿var graph = new Graph<string>(true, true);
+﻿var graph = new Graph<string>(isWeighted: true, isDirected: true);
 Node<string> n1 = graph.AddNode("first");
 Node<string> n2 = graph.AddNode("second");
 Node<string> n3 = graph.AddNode("third");
 Node<string> n4 = graph.AddNode("fourth");
 Node<string> n5 = graph.AddNode("fifth");
+Node<string> n6 = graph.AddNode("sixth");
+Node<string> n7 = graph.AddNode("seventh");
+Node<string> n8 = graph.AddNode("eighth");
 
-graph.AddEdge(n1, n2, 3);
-graph.AddEdge(n2, n3, 5);
-graph.AddEdge(n3, n1, 1);
-graph.AddEdge(n4, n1, 6);
-graph.AddEdge(n4, n5, 1);
-graph.AddEdge(n5, n3, 2);
+graph.AddEdge(n1, n2, 9);
+graph.AddEdge(n1, n3, 5);
+graph.AddEdge(n2, n1, 3);
+graph.AddEdge(n3, n4, 12);
+graph.AddEdge(n2, n4, 18);
+graph.AddEdge(n4, n2, 2);
+graph.AddEdge(n5, n4, 9);
+graph.AddEdge(n4, n8, 8);
+graph.AddEdge(n5, n8, 3);
+graph.AddEdge(n8, n5, 3);
+graph.AddEdge(n5, n6, 2);
+graph.AddEdge(n5, n7, 5);
+graph.AddEdge(n7, n5, 4);
+graph.AddEdge(n7, n8, 6);
+graph.AddEdge(n6, n7, 1);
+
+List<Node<string>> traversalResult = graph.Traverse(GraphOperations.TraversalTypeEnum.DFS);
+traversalResult.ForEach(t => System.Console.WriteLine(t.Data));
 
 var edge = graph[n4, n1];
 
