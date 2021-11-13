@@ -42,25 +42,49 @@ public static class GraphOperations
     private static List<Node<T>> BFS<T>(Graph<T> graph)
     {
         List<Node<T>> nodes = graph.GetNodes();
+        // BFS(nodes[0], visitedNodes, result);
+        return BFS<T>(nodes);
+    }
+
+    private static List<Node<T>> BFS<T>(List<Node<T>> nodes)
+    {
         bool[] visitedNodes = new bool[nodes.Count];
-        var result = new List<Node<T>> { nodes[0] };
-        BFS(nodes[0], visitedNodes, result);
+        visitedNodes[0] = true;
+        var result = new List<Node<T>>();
+        var queue = new Queue<Node<T>>();
+        queue.Enqueue(nodes[0]);
+
+        while(queue.Count > 0)
+        {
+            Node<T> currentNode = queue.Dequeue();        
+            result.Add(currentNode);
+            
+            foreach (Node<T> node in currentNode.Neighbors)
+            {
+                if (visitedNodes[node.Id - 1] == false)
+                {
+                    queue.Enqueue(node);
+                    visitedNodes[node.Id - 1] = true;
+                }
+            }
+        }
+
         return result;
     }
 
-    private static void BFS<T>(Node<T> currentNode, bool[] visitedNodes, List<Node<T>> result)
+    private static void BFSRecursive<T>(Node<T> currentNode, bool[] visitedNodes, List<Node<T>> result)
     {
-        visitedNodes[currentNode.Id - 1] = true;
         var notVisitedNeighbors = new List<Node<T>>();
         foreach (Node<T> node in currentNode.Neighbors)
         {
-            if (visitedNodes[node.Id - 1] == false && result.Any(r => r.Id == node.Id) == false)
+            if (visitedNodes[node.Id - 1] == false)
             {
                 result.Add(node);
+                visitedNodes[node.Id - 1] = true;
                 notVisitedNeighbors.Add(node);
             }
         }
 
-        notVisitedNeighbors.ForEach(node => BFS(node, visitedNodes, result));
+        notVisitedNeighbors.ForEach(node => BFSRecursive(node, visitedNodes, result));
     }
 }
