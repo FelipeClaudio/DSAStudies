@@ -6,6 +6,12 @@ public static class GraphOperations
         BFS
     }
 
+    public enum SpanningTreeAlgorithm
+    {
+        KRUSKAL,
+        PRIM
+    }
+
     public static List<Node<T>> Traverse<T>(this Graph<T> graph, TraversalTypeEnum traversalTypeEnum)
     {
         switch (traversalTypeEnum)
@@ -15,13 +21,13 @@ public static class GraphOperations
             case TraversalTypeEnum.BFS:
                 return BFS(graph);
             default:
-                return (List<Node<T>>) null;
+                throw new ArgumentOutOfRangeException(nameof(traversalTypeEnum));
         }
     }
 
     private static List<Node<T>> DFS<T>(Graph<T> graph)
     {
-        List<Node<T>> nodes = graph.GetNodes();
+        List<Node<T>> nodes = graph.Nodes;
         bool[] visitedNodes = new bool[nodes.Count];
         var result = new List<Node<T>>();
         DFS(nodes[0], visitedNodes, result);
@@ -41,8 +47,8 @@ public static class GraphOperations
 
     private static List<Node<T>> BFS<T>(Graph<T> graph)
     {
-        List<Node<T>> nodes = graph.GetNodes();
-        // BFS(nodes[0], visitedNodes, result);
+        List<Node<T>> nodes = graph.Nodes;
+        // BFSRecursive(nodes[0], visitedNodes, result);
         return BFS<T>(nodes);
     }
 
@@ -86,5 +92,51 @@ public static class GraphOperations
         }
 
         notVisitedNeighbors.ForEach(node => BFSRecursive(node, visitedNodes, result));
+    }
+
+    public static List<Edge<T>> GetMinimunSpanningTree<T>(this Graph<T> graph, SpanningTreeAlgorithm spanningTreeAlgorithm)
+    {
+        switch (spanningTreeAlgorithm)
+        {
+            case SpanningTreeAlgorithm.KRUSKAL:
+                return Kruskal(graph);
+            default:
+                throw new ArgumentOutOfRangeException(nameof(spanningTreeAlgorithm));
+        }
+    }
+
+    private static List<Edge<T>> Kruskal<T>(Graph<T> graph)
+    {
+        var subsets = new List<List<int>>();
+        foreach (Node<T> node in graph.Nodes)
+            subsets.Add(new List<int>{node.Id});
+
+        var minimumEdges = new Queue<Edge<T>>();
+        graph.Edges.OrderBy(e => e.Weight).ToList().ForEach(e => minimumEdges.Enqueue(e));
+
+        var selectedEdges = new List<Edge<T>>();
+        while(selectedEdges.Count < graph.Nodes.Count - 1)
+        {
+            Edge<T> minimumEdge = minimumEdges.Dequeue();
+            var fromNodeSubset = subsets.Single(subset => subset.Contains(minimumEdge.From.Id));
+            var toNodeSubset = subsets.Single(subset => subset.Contains(minimumEdge.To.Id));
+            if (fromNodeSubset != toNodeSubset)
+            {
+                Union(subsets, minimumEdge.From, minimumEdge.To);
+                selectedEdges.Add(minimumEdge);
+            }
+        }
+
+        return selectedEdges;
+    }
+
+    private static void Union<T>(List<List<int>> subsets, Node<T> nodeA, Node<T> nodeB)
+    {
+        List<int> subsetOfNodeA = subsets.Single(subset => subset.Contains(nodeA.Id));
+        List<int> subsetOfNodeB = subsets.Single(subset => subset.Contains(nodeB.Id));
+        subsetOfNodeA.Add(nodeB.Id);
+        
+        // Older node must be removed in order to keep node id in only one list.
+        subsets.Remove(subsetOfNodeB);
     }
 }
