@@ -136,7 +136,7 @@ public static class GraphOperations
     {
         List<int> subsetOfNodeA = subsets.Single(subset => subset.Contains(nodeA.Id));
         List<int> subsetOfNodeB = subsets.Single(subset => subset.Contains(nodeB.Id));
-        subsetOfNodeA.Add(nodeB.Id);
+        subsetOfNodeA.AddRange(subsetOfNodeB);
         
         // Older node must be removed in order to keep node id in only one list.
         subsets.Remove(subsetOfNodeB);

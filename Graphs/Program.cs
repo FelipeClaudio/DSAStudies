@@ -50,7 +50,7 @@ Node<string> nt8 = spanningTreeGraph.AddNode("eighth");
 spanningTreeGraph.AddEdge(nt1, nt2, 3);
 spanningTreeGraph.AddEdge(nt1, nt3, 5);
 spanningTreeGraph.AddEdge(nt2, nt4, 4);
-spanningTreeGraph.AddEdge(nt3, nt4, 12);
+spanningTreeGraph.AddEdge(nt3, nt4, 2);
 spanningTreeGraph.AddEdge(nt4, nt5, 9);
 spanningTreeGraph.AddEdge(nt4, nt8, 8);
 spanningTreeGraph.AddEdge(nt5, nt8, 1);
