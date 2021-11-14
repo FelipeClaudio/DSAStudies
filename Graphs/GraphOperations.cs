@@ -107,6 +107,8 @@ public static class GraphOperations
 
     private static List<Edge<T>> Kruskal<T>(Graph<T> graph)
     {
+        // Each node will be a single subset in the begging.
+        // In the end, all nodes will be merged in a single subset.
         var subsets = new List<List<int>>();
         foreach (Node<T> node in graph.Nodes)
             subsets.Add(new List<int>{node.Id});

@@ -61,4 +61,4 @@ spanningTreeGraph.AddEdge(nt6, nt7, 6);
 
 System.Console.WriteLine("Krukal's");
 List<Edge<string>> kruskalEdges = spanningTreeGraph.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.KRUSKAL);
-kruskalEdges.ForEach(edge => System.Console.WriteLine($"({edge.To.Id}, {edge.From.Id})"));
+kruskalEdges.ForEach(edge => System.Console.WriteLine($"({edge.To.Id}, {edge.From.Id}) => {edge.Weight}"));
