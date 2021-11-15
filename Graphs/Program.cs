@@ -48,17 +48,33 @@ Node<string> nt7 = spanningTreeGraph.AddNode("seventh");
 Node<string> nt8 = spanningTreeGraph.AddNode("eighth");
 
 spanningTreeGraph.AddEdge(nt1, nt2, 3);
+spanningTreeGraph.AddEdge(nt2, nt1, 3);
 spanningTreeGraph.AddEdge(nt1, nt3, 5);
+spanningTreeGraph.AddEdge(nt3, nt1, 5);
 spanningTreeGraph.AddEdge(nt2, nt4, 4);
-spanningTreeGraph.AddEdge(nt3, nt4, 2);
+spanningTreeGraph.AddEdge(nt4, nt2, 4);
+spanningTreeGraph.AddEdge(nt3, nt4, 12);
+spanningTreeGraph.AddEdge(nt4, nt3, 12);
 spanningTreeGraph.AddEdge(nt4, nt5, 9);
+spanningTreeGraph.AddEdge(nt5, nt4, 9);
 spanningTreeGraph.AddEdge(nt4, nt8, 8);
+spanningTreeGraph.AddEdge(nt8, nt4, 8);
 spanningTreeGraph.AddEdge(nt5, nt8, 1);
+spanningTreeGraph.AddEdge(nt8, nt5, 1);
 spanningTreeGraph.AddEdge(nt5, nt7, 5);
+spanningTreeGraph.AddEdge(nt7, nt5, 5);
 spanningTreeGraph.AddEdge(nt7, nt8, 20);
+spanningTreeGraph.AddEdge(nt8, nt7, 20);
 spanningTreeGraph.AddEdge(nt5, nt6, 4);
+spanningTreeGraph.AddEdge(nt6, nt5, 4);
 spanningTreeGraph.AddEdge(nt6, nt7, 6);
+spanningTreeGraph.AddEdge(nt7, nt6, 6);
 
 System.Console.WriteLine("Krukal's");
 List<Edge<string>> kruskalEdges = spanningTreeGraph.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.KRUSKAL);
 kruskalEdges.ForEach(edge => System.Console.WriteLine($"({edge.To.Id}, {edge.From.Id}) => {edge.Weight}"));
+
+System.Console.WriteLine("Prim's");
+List<Edge<string>> primEdges = spanningTreeGraph.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.PRIM);
+primEdges.ForEach(edge => System.Console.WriteLine($"({edge.To.Id}, {edge.From.Id}) => {edge.Weight}"));
+

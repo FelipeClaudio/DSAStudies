@@ -100,6 +100,8 @@ public static class GraphOperations
         {
             case SpanningTreeAlgorithm.KRUSKAL:
                 return Kruskal(graph);
+            case SpanningTreeAlgorithm.PRIM:
+                return Prim(graph);
             default:
                 throw new ArgumentOutOfRangeException(nameof(spanningTreeAlgorithm));
         }
@@ -140,5 +142,51 @@ public static class GraphOperations
         
         // Older node must be removed in order to keep node id in only one list.
         subsets.Remove(subsetOfNodeB);
+    }
+
+    private static List<Edge<T>> Prim<T>(Graph<T> graph)
+    {
+        // Each node will be a single subset in the begging.
+        // In the end, all nodes will be merged in a single subset.
+        var subsets = new List<List<int>>();
+        foreach (Node<T> node in graph.Nodes)
+            subsets.Add(new List<int>{node.Id});
+
+        List<Edge<T>> originalEdges = new List<Edge<T>>(graph.Edges);
+        Node<T> initialNode = graph.Nodes[0];
+        var minimumEdges = new List<Edge<T>>();
+        graph.Edges.Where(edge => edge.From == initialNode)
+                .OrderBy(edge => edge.Weight)
+                .ToList()
+                .ForEach(edge => minimumEdges = UpdateMinimumEdges(minimumEdges, originalEdges, edge));
+
+        var selectedEdges = new List<Edge<T>>();
+        while(selectedEdges.Count < graph.Nodes.Count - 1)
+        {
+            Edge<T> minimumLocalEdge = minimumEdges[0];  
+
+            var fromNodeSubset = subsets.Single(subset => subset.Contains(minimumLocalEdge.From.Id));
+            var toNodeSubset = subsets.Single(subset => subset.Contains(minimumLocalEdge.To.Id));
+            if (fromNodeSubset != toNodeSubset)
+            {
+                Union(subsets, minimumLocalEdge.From, minimumLocalEdge.To);
+                selectedEdges.Add(minimumLocalEdge);
+                minimumEdges = UpdateMinimumEdges(minimumEdges, originalEdges, minimumLocalEdge);
+            }
+
+            minimumEdges.Remove(minimumLocalEdge);
+        }
+
+        return selectedEdges;
+    }
+
+    private static List<Edge<T>> UpdateMinimumEdges<T>(List<Edge<T>> minimumEdges, List<Edge<T>> originalEdges, Edge<T> newEdge)
+    {
+        IEnumerable<Edge<T>> connectedEdges = originalEdges.Where(edge => (edge.To == newEdge.To || edge.From == newEdge.To
+            || edge.To == newEdge.From || edge.From == newEdge.From));
+
+        minimumEdges.AddRange(connectedEdges);
+        minimumEdges = minimumEdges.OrderBy(edge => edge.Weight).ToList();
+        return minimumEdges;
     }
 }
