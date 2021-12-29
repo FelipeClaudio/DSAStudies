@@ -78,3 +78,43 @@ System.Console.WriteLine("Prim's");
 List<Edge<string>> primEdges = spanningTreeGraph.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.PRIM);
 primEdges.ForEach(edge => System.Console.WriteLine($"({edge.To.Id}, {edge.From.Id}) => {edge.Weight}"));
 
+var telecomSpanningTree = new Graph<string>(isWeighted: true, isDirected: false);
+Node<string> b1 = telecomSpanningTree.AddNode("b1");
+Node<string> b2 = telecomSpanningTree.AddNode("b2");
+Node<string> b3 = telecomSpanningTree.AddNode("b3");
+Node<string> b4 = telecomSpanningTree.AddNode("b4");
+Node<string> b5 = telecomSpanningTree.AddNode("b5");
+Node<string> b6 = telecomSpanningTree.AddNode("b6");
+Node<string> r1 = telecomSpanningTree.AddNode("r1");
+Node<string> r2 = telecomSpanningTree.AddNode("r2");
+Node<string> r3 = telecomSpanningTree.AddNode("r3");
+Node<string> r4 = telecomSpanningTree.AddNode("r4");
+Node<string> r5 = telecomSpanningTree.AddNode("r5");
+Node<string> r6 = telecomSpanningTree.AddNode("r6");
+
+
+telecomSpanningTree.AddEdge(b1, b2, 2);
+telecomSpanningTree.AddEdge(b1, b3, 20);
+telecomSpanningTree.AddEdge(b1, b4, 30);
+telecomSpanningTree.AddEdge(b2, b3, 30);
+telecomSpanningTree.AddEdge(b2, b4, 20);
+telecomSpanningTree.AddEdge(b3, b4, 2);
+telecomSpanningTree.AddEdge(b2, r2, 25);
+telecomSpanningTree.AddEdge(b4, r4, 25);
+telecomSpanningTree.AddEdge(r3, r4, 1);
+telecomSpanningTree.AddEdge(r3, r2, 1);
+telecomSpanningTree.AddEdge(r1, r2, 1);
+telecomSpanningTree.AddEdge(r1, r5, 75);
+telecomSpanningTree.AddEdge(r3, r6, 100);
+telecomSpanningTree.AddEdge(r6, b5, 3);
+telecomSpanningTree.AddEdge(r6, r5, 3);
+telecomSpanningTree.AddEdge(b5, b6, 6);
+telecomSpanningTree.AddEdge(b6, r6, 10);
+
+var kruskalMinSpanTree = telecomSpanningTree.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.KRUSKAL);
+System.Console.WriteLine($"Kruskal's mininmun spanning tree: Cost: {kruskalMinSpanTree.Sum(k => k.Weight)}");
+kruskalMinSpanTree.ForEach(k => System.Console.WriteLine($"to: {k.To.Id} | from: {k.From.Id} | weight: {k.Weight}"));
+
+var primMinSpanTree = telecomSpanningTree.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.PRIM);
+System.Console.WriteLine($"Prim's mininmun spanning tree: Cost: {primMinSpanTree.Sum(k => k.Weight)}");
+primMinSpanTree.ForEach(k => System.Console.WriteLine($"to: {k.To.Id} | from: {k.From.Id} | weight: {k.Weight}"));
