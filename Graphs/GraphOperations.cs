@@ -107,9 +107,11 @@ public static class GraphOperations
         }
     }
 
+    // This algorithm takes the minimal cost edge, even thought it is not
+    // connect to any of the edges in the subset.
     private static List<Edge<T>> Kruskal<T>(Graph<T> graph)
     {
-        // Each node will be a single subset in the begging.
+        // Each node will be a single subset in the begining.
         // In the end, all nodes will be merged in a single subset.
         var subsets = new List<List<int>>();
         foreach (Node<T> node in graph.Nodes)
@@ -144,9 +146,11 @@ public static class GraphOperations
         subsets.Remove(subsetOfNodeB);
     }
 
+    // This algorithm takes the edge with the lowest weight that is already
+    // connected to any node in subset.
     private static List<Edge<T>> Prim<T>(Graph<T> graph)
     {
-        // Each node will be a single subset in the begging.
+        // Each node will be a single subset in the begining.
         // In the end, all nodes will be merged in a single subset.
         var subsets = new List<List<int>>();
         foreach (Node<T> node in graph.Nodes)
