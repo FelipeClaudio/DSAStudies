@@ -193,4 +193,22 @@ public static class GraphOperations
         minimumEdges = minimumEdges.OrderBy(edge => edge.Weight).ToList();
         return minimumEdges;
     }
+
+    public static void ColorNodes<T>(this ColoredGraph<T> coloredGraph)
+    {
+        var colorEnumList = Enum.GetValues<ColorsEnum>()
+            .Where(color => color != ColorsEnum.NO_COLOR)
+            .ToList();
+        foreach (var node in coloredGraph.Nodes)
+        {
+            foreach (var color in colorEnumList)
+            {
+               if (node.Neighbors.Any(n => ((ColoredNode<T>) n).Color == (ColorsEnum) color) == false)
+               {
+                ((ColoredNode<T>) node).Color = (ColorsEnum) color;
+                    break;
+               }
+            }
+        }
+    }
 }

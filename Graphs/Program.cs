@@ -118,3 +118,28 @@ kruskalMinSpanTree.ForEach(k => System.Console.WriteLine($"to: {k.To.Id} | from:
 var primMinSpanTree = telecomSpanningTree.GetMinimunSpanningTree(GraphOperations.SpanningTreeAlgorithm.PRIM);
 System.Console.WriteLine($"Prim's mininmun spanning tree: Cost: {primMinSpanTree.Sum(k => k.Weight)}");
 primMinSpanTree.ForEach(k => System.Console.WriteLine($"to: {k.To.Id} | from: {k.From.Id} | weight: {k.Weight}"));
+
+var coloringMapGraph = new ColoredGraph<int>(isWeighted: false, isDirected: false);
+var cn1 = coloringMapGraph.AddColoredNode(1);
+var cn2 = coloringMapGraph.AddColoredNode(2);
+var cn3 = coloringMapGraph.AddColoredNode(3);
+var cn4 = coloringMapGraph.AddColoredNode(4);
+var cn5 = coloringMapGraph.AddColoredNode(5);
+var cn6 = coloringMapGraph.AddColoredNode(6);
+var cn7 = coloringMapGraph.AddColoredNode(7);
+var cn8 = coloringMapGraph.AddColoredNode(8);
+
+coloringMapGraph.AddEdge(cn1, cn3);
+coloringMapGraph.AddEdge(cn1, cn2);
+coloringMapGraph.AddEdge(cn3, cn4);
+coloringMapGraph.AddEdge(cn2, cn4);
+coloringMapGraph.AddEdge(cn4, cn5);
+coloringMapGraph.AddEdge(cn4, cn8);
+coloringMapGraph.AddEdge(cn5, cn6);
+coloringMapGraph.AddEdge(cn5, cn8);
+coloringMapGraph.AddEdge(cn5, cn7);
+coloringMapGraph.AddEdge(cn6, cn7);
+coloringMapGraph.AddEdge(cn8, cn7);
+
+coloringMapGraph.ColorNodes();
+coloringMapGraph.Nodes.ForEach(node => System.Console.WriteLine($"node {node.Id} | color {((ColoredNode<int>) node).Color.ToString()}"));

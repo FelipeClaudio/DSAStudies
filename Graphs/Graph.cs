@@ -38,7 +38,10 @@ public class Graph<T>
             // The path starting at "to" and finish at "from" is also added
             // if it doesn't already exist in an undirected and unweighted
             if (this._isDirected == false && this._isWeighted == false && this[to, from] == null)
+            {
                 this.Edges.Add(new Edge<T>(to, from, 1));            
+                to.Neighbors.Add(from);
+            }
         }
     }
 
