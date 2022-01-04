@@ -190,8 +190,7 @@ public static class GraphOperations
             || edge.To == newEdge.From || edge.From == newEdge.From));
 
         minimumEdges.AddRange(connectedEdges);
-        minimumEdges = minimumEdges.OrderBy(edge => edge.Weight).ToList();
-        return minimumEdges;
+        return minimumEdges.OrderBy(edge => edge.Weight).ToList();
     }
 
     public static void ColorNodes<T>(this ColoredGraph<T> coloredGraph)
