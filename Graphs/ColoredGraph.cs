@@ -2,7 +2,6 @@ public class ColoredGraph<T> : Graph<T>
 {
     public ColoredGraph(bool isWeighted, bool isDirected) : base(isWeighted, isDirected) {}
 
-
     public ColoredNode<T> AddColoredNode(T data)
     {
         var node = new ColoredNode<T>(data);

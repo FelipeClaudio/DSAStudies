@@ -1,4 +1,6 @@
-﻿var graph = new Graph<string>(isWeighted: true, isDirected: true);
+﻿using Force.DeepCloner;
+
+var graph = new Graph<string>(isWeighted: true, isDirected: true);
 Node<string> n1 = graph.AddNode("first");
 Node<string> n2 = graph.AddNode("second");
 Node<string> n3 = graph.AddNode("third");
@@ -23,6 +25,9 @@ graph.AddEdge(n5, n7, 5);
 graph.AddEdge(n7, n5, 4);
 graph.AddEdge(n7, n8, 6);
 graph.AddEdge(n6, n7, 1);
+
+// Graph used for djisktra algorithm.
+var dGraph = graph.DeepClone();
 
 System.Console.WriteLine("DFS:");
 List<Node<string>> dfsTraversalResult = graph.Traverse(GraphOperations.TraversalTypeEnum.DFS);
@@ -143,3 +148,16 @@ coloringMapGraph.AddEdge(cn8, cn7);
 
 coloringMapGraph.ColorNodes();
 coloringMapGraph.Nodes.ForEach(node => System.Console.WriteLine($"node {node.Id} | color {((ColoredNode<int>) node).Color.ToString()}"));
+
+var distances = dGraph.GetShortestPathDjikstra(n8, n1);
+for (int i = 0; i < distances.Count; i++)
+{
+    System.Console.WriteLine($"Distance from node '{n8.Data}' to node '{dGraph[i + 1].Data}' is: '{distances[i]}' ");
+}
+System.Console.WriteLine("");
+
+var distances2 = dGraph.GetShortestPathDjikstra(n1, n7);
+for (int i = 0; i < distances2.Count; i++)
+{
+    System.Console.WriteLine($"Distance from node '{n1.Data}' to node '{dGraph[i + 1].Data}' is: '{distances2[i]}' ");
+}

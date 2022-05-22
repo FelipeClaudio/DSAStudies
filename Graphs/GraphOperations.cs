@@ -210,4 +210,51 @@ public static class GraphOperations
             }
         }
     }
+
+    public static List<int> GetShortestPathDjikstra<T>(this Graph<T> graph, Node<T> source, Node<T> target)
+    {
+        // Initialize distances array with max values.
+        // Only the source node is initialized with 0.
+        List<int> distances = new(graph.Nodes.Count);
+        distances.AddRange(graph.Nodes.Select(node => Int32.MaxValue));
+        distances[source.Id - 1] = 0;
+
+        List<Node<T>> traversedNodes = new(graph.Nodes.Count);
+        traversedNodes.Add(source);
+
+        // It stores informations about all available neighbors 
+        // that are connected to previously traversed nodes.
+        PriorityQueue<Node<T>, int> availableNeighbors = new();
+
+        var currentNode = source;
+        while (traversedNodes.Count != graph.Nodes.Count)
+        {
+            var availableEdges = graph.Edges.Where(e => e.From.Id == currentNode.Id).ToList();
+            
+            // Edges related to previously traversed nodes must be removed.
+            var edgesToRemove = (from edge in availableEdges
+                join node in traversedNodes on edge.To.Id equals node.Id
+                select edge).ToList();
+            edgesToRemove?.ForEach(edge => availableEdges.Remove(edge));
+            
+            foreach (var edge in availableEdges)
+            {
+                availableNeighbors.Enqueue(edge.To, edge.Weight);
+
+                // Changes distance if new calculated distance is less than current one.
+                if (edge.Weight + distances[currentNode.Id -1] < distances[edge.To.Id -1])
+                    distances[edge.To.Id - 1] = edge.Weight + distances[currentNode.Id -1];
+            }
+
+            // Only selects not traversed nodes.
+            do{
+                currentNode = availableNeighbors.Dequeue();
+            }
+            while(traversedNodes.Any(node => node.Id == currentNode.Id)); 
+
+            traversedNodes.Add(currentNode);
+        }
+
+        return distances;
+    }
 }
